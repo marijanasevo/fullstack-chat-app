@@ -1,0 +1,17 @@
+{
+  "name": "fullstack-chat-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "watch-server": "npm run watch --prefix server",
+    "watch-client": "npm run dev --prefix client",
+    "watch": "concurrently \"npm run watch-server\" \"npm run watch-client\"",
+    "deploy": "npm run build --prefix client && npm run start --prefix server"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
