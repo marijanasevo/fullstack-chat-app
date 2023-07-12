@@ -19,7 +19,7 @@ const ChatPage = () => {
   const [chats, setChats] = useState<Chat[]>([]);
 
   const fetchChats = async () => {
-    const { data }: { data: Chat[] } = await axios.get(API_URL + '/api/chat');
+    const { data }: { data: Chat[] } = await axios.get(API_URL + '/api/chats');
 
     setChats(data);
   };
