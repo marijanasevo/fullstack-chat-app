@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const userSchema = new Schema(
   {
@@ -13,5 +14,25 @@ const userSchema = new Schema(
   },
   { timestamps: true }
 );
+
+userSchema.methods.matchPassword = async function matchPassword(
+  enteredPassword
+) {
+  const user = this;
+  return await bcrypt.compare(enteredPassword, user.password);
+};
+
+// Just before saving
+// @ts-ignore
+userSchema.pre('save', async function (next) {
+  const user = this;
+
+  if (!user.isModified) next();
+
+  const rounds = 10;
+
+  const hash = await bcrypt.hash(user.password, rounds);
+  user.password = hash;
+});
 
 module.exports = model('User', userSchema);

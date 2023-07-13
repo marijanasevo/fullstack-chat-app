@@ -1,6 +1,8 @@
 const {
   doesUserExist,
   createNewUser,
+  matchUserPassword,
+  formatUserResponse,
 } = require('../../models/users/users.model');
 
 async function httpCreateNewUser(req, res) {
@@ -25,4 +27,19 @@ async function httpCreateNewUser(req, res) {
   }
 }
 
-module.exports = { httpCreateNewUser };
+async function httpLogin(req, res) {
+  const { email, password } = req.body;
+
+  const user = await doesUserExist(email, false);
+  const matchPassword = user ? await matchUserPassword(user, password) : null;
+
+  if (user && matchPassword) {
+    res.json(formatUserResponse(user));
+  } else if (!user) {
+    res.status(404).json({ error: 'No such user in our database' });
+  } else {
+    res.status(404).json({ error: 'Wrong password' });
+  }
+}
+
+module.exports = { httpCreateNewUser, httpLogin };
