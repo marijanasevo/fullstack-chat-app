@@ -9,9 +9,9 @@ async function httpCreateNewUser(req, res) {
   const { name, email, password, image } = req.body;
 
   if (!name || !email || !password) {
-    return res
-      .status(400)
-      .json({ error: `Missing required property to register a user.` });
+    return res.status(400).json({
+      error: `Missing required property to register a user.`,
+    });
   }
 
   if (await doesUserExist(email)) {
@@ -38,7 +38,7 @@ async function httpLogin(req, res) {
   } else if (!user) {
     res.status(404).json({ error: 'No such user in our database' });
   } else {
-    res.status(404).json({ error: 'Wrong password' });
+    res.status(403).json({ error: 'Wrong password' });
   }
 }
 

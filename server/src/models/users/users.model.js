@@ -23,6 +23,7 @@ function formatUserResponse(user) {
     password: user.password,
     id: user._id,
     token: generateJWTToken(user._id),
+    image: user.image,
   };
 }
 

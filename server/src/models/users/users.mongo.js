@@ -6,7 +6,7 @@ const userSchema = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    pic: {
+    image: {
       type: String,
       required: true,
       default: 'https://icon-library.com/images/girl-icon/girl-icon-28.jpg',
