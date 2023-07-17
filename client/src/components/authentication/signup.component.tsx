@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 
 import { toastOptions } from '../../utils/toast-options';
+import { UserResponseType } from './login.component';
 
 const API_URL = 'http://localhost:3000';
 
@@ -84,11 +85,15 @@ const SignUp = () => {
         image,
       };
 
-      const { data } = await axios.post(API_URL + '/api/users', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const { data } = await axios.post<UserResponseType>(
+        API_URL + '/api/users',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       toast({
         ...toastOptions,

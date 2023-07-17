@@ -30,7 +30,7 @@ interface LoginErrorResponse {
   error: string;
 }
 
-type UserResponseType = UserData | LoginErrorResponse;
+export type UserResponseType = UserData | LoginErrorResponse;
 
 function Login() {
   const [show, setShow] = useState<boolean>(false);
