@@ -85,6 +85,7 @@ function Login() {
           placeholder='Enter Your Email'
           onChange={e => setEmail(e.target.value)}
           bgColor={'#f0f0f0'}
+          value={email}
         />
       </FormControl>
 
@@ -95,6 +96,7 @@ function Login() {
             type={show ? 'text' : 'password'}
             placeholder='Enter Your Password'
             onChange={e => setPassword(e.target.value)}
+            value={password}
             bgColor={'#f0f0f0'}
           />
           <InputRightElement w='4.5rem'>
@@ -118,8 +120,8 @@ function Login() {
         bgColor='#eff6c6'
         width='100%'
         onClick={() => {
-          setEmail('guest@example.com');
-          setPassword('123456');
+          setEmail('mar@gmail.com');
+          setPassword('12345');
         }}>
         Get Guest User Credentials
       </Button>
