@@ -13,16 +13,9 @@ import {
   Button,
   InputGroup,
   useToast,
-  UseToastOptions,
 } from '@chakra-ui/react';
 
-const toastOptions: UseToastOptions = {
-  title: 'Please select an image',
-  status: 'warning',
-  duration: 6000,
-  isClosable: true,
-  position: 'bottom',
-};
+import { toastOptions } from '../../utils/toast-options';
 
 const API_URL = 'http://localhost:3000';
 
@@ -37,7 +30,7 @@ const SignUp = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const postDetails = async (image: File) => {
+  const postDetails = async (image: File): Promise<void> => {
     setLoadingImage(true);
     if (image === undefined) {
       toast(toastOptions);
@@ -46,31 +39,30 @@ const SignUp = () => {
     }
 
     if (image.type.includes('image/')) {
-      const data = new FormData();
-      data.append('file', image);
-      data.append('upload_preset', 'fullstack-chat-app');
-      data.append('cloud_name', 'dpqrn6zys');
+      const formData = new FormData();
+      formData.append('file', image);
+      formData.append('upload_preset', 'fullstack-chat-app');
+      formData.append('cloud_name', 'dpqrn6zys');
 
-      await fetch('https://api.cloudinary.com/v1_1/dpqrn6zys/image/upload', {
-        method: 'POST',
-        body: data,
-      })
-        .then(res => res.json())
-        .then((data: cloudinary.UploadApiResponse) => {
-          console.log(data?.secure_url);
-          setImage(data?.secure_url);
-          setLoadingImage(false);
-        })
-        .catch(err => {
-          console.log("Couldn't properly load the image");
-        })
-        .finally(() => setLoadingImage(false));
+      try {
+        const { data } = await axios.post<cloudinary.UploadApiResponse>(
+          'https://api.cloudinary.com/v1_1/dpqrn6zys/image/upload',
+          formData
+        );
+        setImage(data.secure_url);
+      } catch (err) {
+        console.log('Something went wrong while loading the image', err);
+      }
+
+      setLoadingImage(false);
     } else {
       toast(toastOptions);
     }
+
+    return;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     if (!name || !email || !password || !configmPassword) {
       toast({ ...toastOptions, title: 'Please fill all the fields' });
       setLoadingImage(false);
@@ -119,6 +111,7 @@ const SignUp = () => {
         });
       }
     }
+    return;
   };
 
   return (
@@ -185,7 +178,7 @@ const SignUp = () => {
           onChange={e => {
             const image = e.target.files?.[0];
             if (image) {
-              postDetails(image);
+              void postDetails(image);
             }
           }}
         />
@@ -202,4 +195,5 @@ const SignUp = () => {
     </VStack>
   );
 };
+
 export default SignUp;
