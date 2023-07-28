@@ -3,6 +3,7 @@ const {
   createNewUser,
   matchUserPassword,
   formatUserResponse,
+  getAllUsers,
 } = require('../../models/users/users.model');
 
 async function httpCreateNewUser(req, res) {
@@ -42,4 +43,18 @@ async function httpLogin(req, res) {
   }
 }
 
-module.exports = { httpCreateNewUser, httpLogin };
+async function httpsGetAllUsers(req, res) {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: 'i' } },
+          { email: { $regex: req.query.search, $options: 'i' } },
+        ],
+      }
+    : {};
+
+  const users = await getAllUsers(req, keyword);
+  res.status(200).json(users);
+}
+
+module.exports = { httpCreateNewUser, httpLogin, httpsGetAllUsers };

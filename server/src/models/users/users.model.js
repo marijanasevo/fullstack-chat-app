@@ -31,9 +31,21 @@ async function matchUserPassword(user, password) {
   return await user.matchPassword(password);
 }
 
+async function getAllUsers(req, keyword) {
+  // $not equal
+  return await users.find(keyword).find({ _id: { $ne: req.user._id } });
+}
+
+async function getAuthUser(id) {
+  // return auth user without password
+  return await users.findById(id).select('-password');
+}
+
 module.exports = {
   doesUserExist,
   createNewUser,
   matchUserPassword,
   formatUserResponse,
+  getAllUsers,
+  getAuthUser,
 };
