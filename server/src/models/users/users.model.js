@@ -41,6 +41,13 @@ async function getAuthUser(id) {
   return await users.findById(id).select('-password');
 }
 
+async function getLatestMessageSender(chat) {
+  return await users.populate(chat, {
+    path: 'latestMessage.sender',
+    select: 'name pic email',
+  });
+}
+
 module.exports = {
   doesUserExist,
   createNewUser,
@@ -48,4 +55,5 @@ module.exports = {
   formatUserResponse,
   getAllUsers,
   getAuthUser,
+  getLatestMessageSender,
 };

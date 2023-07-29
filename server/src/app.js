@@ -2,9 +2,9 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const { chats } = require('../data/chats');
 
 const usersRouter = require('./routes/users/users.router');
+const chatsRouter = require('./routes/chats/chats.router');
 
 const publicPath = path.join(__dirname, '..', 'public');
 
@@ -24,16 +24,7 @@ app.get('/', (req, res) => {
   res.send('API is running');
 });
 
-app.get('/api/chats', (req, res) => {
-  res.send(chats);
-});
-
-app.get('/api/chats/:id', (req, res) => {
-  const chatId = req.params.id;
-  const chat = chats.find(chat => chat._id === chatId);
-  res.send(chat);
-});
-
 app.use('/api/users', usersRouter);
+app.use('/api/chats', chatsRouter);
 
 module.exports = app;

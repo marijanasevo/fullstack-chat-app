@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { getAuthUser } = require('../models/users/users.model');
 
-async function protect(req, res, next) {
+async function checkAuth(req, res, next) {
   let token;
 
   if (
@@ -27,4 +27,4 @@ async function protect(req, res, next) {
   }
 }
 
-module.exports = { protect };
+module.exports = { checkAuth };

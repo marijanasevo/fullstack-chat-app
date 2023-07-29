@@ -4,12 +4,12 @@ const {
   httpLogin,
   httpsGetAllUsers,
 } = require('./users.controller');
-const { protect } = require('../../middleware/authMiddleware');
+const { checkAuth } = require('../../middleware/authMiddleware');
 
 const usersRouter = express.Router();
 
 usersRouter.post('/', httpCreateNewUser);
-usersRouter.get('/', protect, httpsGetAllUsers);
+usersRouter.get('/', checkAuth, httpsGetAllUsers);
 usersRouter.post('/login', httpLogin);
 
 module.exports = usersRouter;
