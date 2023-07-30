@@ -2,6 +2,7 @@ const {
   getChat,
   createChat,
   getChatById,
+  getAllChats,
 } = require('../../models/chats/chats.model');
 const { getLatestMessageSender } = require('../../models/users/users.model');
 
@@ -36,6 +37,14 @@ async function httpGetChat(req, res) {
   }
 }
 
-async function httpGetAllChats() {}
+async function httpGetAllChats(req, res) {
+  try {
+    let chats = await getAllChats(req.user._id);
+    // chats = await getLatestMessageSender(chats);
+    res.json(chats);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+}
 
 module.exports = { httpGetChat, httpGetAllChats };

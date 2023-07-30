@@ -1,5 +1,14 @@
 const chats = require('./chats.mongo');
 
+async function getAllChats(authUserId) {
+  return await chats
+    .find({ users: { $elemMatch: { $eq: authUserId } } })
+    .populate('users', '-password')
+    .populate('groupAdmin', '-password')
+    .populate('latestMessage')
+    .sort({ updatedAt: -1 });
+}
+
 async function getChat(authUserId, partnerUserId) {
   return await chats
     .find({
@@ -21,4 +30,4 @@ async function createChat(chatData) {
   return chats.create(chatData);
 }
 
-module.exports = { getChat, createChat, getChatById };
+module.exports = { getChat, getChatById, getAllChats, createChat };
