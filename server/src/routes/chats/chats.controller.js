@@ -3,6 +3,7 @@ const {
   createChat,
   getChatById,
   getAllChats,
+  createGroupChat,
 } = require('../../models/chats/chats.model');
 const { getLatestMessageSender } = require('../../models/users/users.model');
 
@@ -47,4 +48,35 @@ async function httpGetAllChats(req, res) {
   }
 }
 
-module.exports = { httpGetChat, httpGetAllChats };
+async function httpCreateGroupChat(req, res) {
+  if (!req.body.users || !req.body.name) {
+    return res.status(400).json({
+      error: "Can't create a group chat with both group name and users",
+    });
+  }
+
+  let users = req.body.users;
+
+  if (users.length < 2) {
+    return res.status(400).json({
+      error: "Can't create a group chat if less than 3 users are participating",
+    });
+  }
+
+  users.push(req.user);
+
+  try {
+    const createdGroupChat = await createGroupChat({
+      users,
+      groupAdmin: req.user,
+      chatName: req.body.name,
+    });
+
+    const groupChat = await getChatById(createdGroupChat._id);
+    res.json(groupChat);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+}
+
+module.exports = { httpGetChat, httpGetAllChats, httpCreateGroupChat };

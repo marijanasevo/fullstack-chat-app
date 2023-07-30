@@ -23,11 +23,29 @@ async function getChat(authUserId, partnerUserId) {
 }
 
 async function getChatById(chatId) {
-  return await chats.findById({ _id: chatId }).populate('users', '-password');
+  return await chats
+    .findById({ _id: chatId })
+    .populate('users', '-password')
+    .populate('groupAdmin', '-password');
 }
 
 async function createChat(chatData) {
   return chats.create(chatData);
 }
 
-module.exports = { getChat, getChatById, getAllChats, createChat };
+async function createGroupChat({ chatName, users, groupAdmin }) {
+  return await chats.create({
+    users,
+    chatName,
+    groupAdmin,
+    isGroupChat: true,
+  });
+}
+
+module.exports = {
+  getChat,
+  getChatById,
+  getAllChats,
+  createChat,
+  createGroupChat,
+};

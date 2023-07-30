@@ -2,18 +2,21 @@ const express = require('express');
 const chats = require('../../../data/chats');
 const { checkAuth } = require('../../middleware/authMiddleware');
 
-const { httpGetChat, httpGetAllChats } = require('./chats.controller');
+const {
+  httpGetChat,
+  httpGetAllChats,
+  httpCreateGroupChat,
+} = require('./chats.controller');
 
 const chatsRouter = express.Router();
 
 chatsRouter.get('/', checkAuth, httpGetAllChats);
 chatsRouter.post('/', checkAuth, httpGetChat);
 
-// const groupChatsRouter = express.Router();
+const groupChatsRouter = express.Router();
+chatsRouter.use('/group', groupChatsRouter);
 
-// chatsRouter.use('/group', groupChatsRouter);
-
-// groupChatsRouter.post('/', checkAuth, httpCreateGroupChat);
+groupChatsRouter.post('/', checkAuth, httpCreateGroupChat);
 // groupChatsRouter.put('/:chatId', checkAuth, httpRenameGroupChat);
 // groupChatsRouter.delete(
 //   '/:chatId/members/:memberId',
