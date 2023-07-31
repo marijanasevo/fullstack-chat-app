@@ -54,6 +54,32 @@ async function renameGroupChat(groupChatId, name) {
   );
 }
 
+async function addGroupChatMember(groupChatId, memberId) {
+  return await chats
+    .findByIdAndUpdate(
+      groupChatId,
+      {
+        $push: { users: memberId },
+      },
+      { new: true }
+    )
+    .populate('users', '-password')
+    .populate('groupAdmin', '-password');
+}
+
+async function removeGroupChatMember(groupChatId, memberId) {
+  return await chats
+    .findByIdAndUpdate(
+      groupChatId,
+      {
+        $pull: { users: memberId },
+      },
+      { new: true }
+    )
+    .populate('users', '-password')
+    .populate('groupAdmin', '-password');
+}
+
 module.exports = {
   getChat,
   getChatById,
@@ -61,4 +87,6 @@ module.exports = {
   createChat,
   createGroupChat,
   renameGroupChat,
+  addGroupChatMember,
+  removeGroupChatMember,
 };

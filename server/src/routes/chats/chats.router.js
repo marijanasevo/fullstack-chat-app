@@ -7,6 +7,8 @@ const {
   httpGetAllChats,
   httpCreateGroupChat,
   httpRenameGroupChat,
+  httpAddGroupChatMember,
+  httpRemoveGroupChatMember,
 } = require('./chats.controller');
 
 const chatsRouter = express.Router();
@@ -19,6 +21,16 @@ chatsRouter.use('/group', groupChatsRouter);
 
 groupChatsRouter.post('/', checkAuth, httpCreateGroupChat);
 groupChatsRouter.put('/:groupChatId', checkAuth, httpRenameGroupChat);
+groupChatsRouter.post(
+  '/:groupChatId/members',
+  checkAuth,
+  httpAddGroupChatMember
+);
+groupChatsRouter.delete(
+  '/:groupChatId/members',
+  checkAuth,
+  httpRemoveGroupChatMember
+);
 // groupChatsRouter.delete(
 //   '/:chatId/members/:memberId',
 //   checkAuth,
