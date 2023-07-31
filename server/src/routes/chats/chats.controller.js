@@ -4,6 +4,7 @@ const {
   getChatById,
   getAllChats,
   createGroupChat,
+  renameGroupChat,
 } = require('../../models/chats/chats.model');
 const { getLatestMessageSender } = require('../../models/users/users.model');
 
@@ -79,4 +80,27 @@ async function httpCreateGroupChat(req, res) {
   }
 }
 
-module.exports = { httpGetChat, httpGetAllChats, httpCreateGroupChat };
+async function httpRenameGroupChat(req, res) {
+  const { groupChatId } = req.params;
+  const { name } = req.body;
+
+  if (!groupChatId || !name) {
+    res
+      .status(400)
+      .json({ error: 'Missing groupChatId param and/or new group name' });
+  }
+
+  try {
+    const renamedGroupChat = await renameGroupChat(groupChatId, name);
+    res.json(renamedGroupChat);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
+module.exports = {
+  httpGetChat,
+  httpGetAllChats,
+  httpCreateGroupChat,
+  httpRenameGroupChat,
+};

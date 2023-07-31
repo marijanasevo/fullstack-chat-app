@@ -42,10 +42,23 @@ async function createGroupChat({ chatName, users, groupAdmin }) {
   });
 }
 
+async function renameGroupChat(groupChatId, name) {
+  return await chats.findByIdAndUpdate(
+    groupChatId,
+    {
+      chatName: name,
+    },
+    {
+      new: true,
+    }
+  );
+}
+
 module.exports = {
   getChat,
   getChatById,
   getAllChats,
   createChat,
   createGroupChat,
+  renameGroupChat,
 };
